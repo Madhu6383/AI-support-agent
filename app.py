@@ -19,9 +19,10 @@ suggest contacting human support at support@brightcart.example.com."""
 
 # ---------- API KEY ----------
 # Get a FREE API key at https://console.groq.com (no credit card required)
-api_key = st.secrets.get("GROQ_API_KEY", None) or st.sidebar.text_input(
-    "Enter your free Groq API key", type="password"
-)
+try:
+    api_key = st.secrets["GROQ_API_KEY"]
+except Exception:
+    api_key = st.sidebar.text_input("Enter your free Groq API key", type="password")
 
 if not api_key:
     st.info("👈 Enter your free Groq API key in the sidebar to start chatting. Get one at https://console.groq.com")
@@ -49,7 +50,7 @@ if user_input:
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             response = client.chat.completions.create(
-                model="llama-3.1-8b-instant",  # fast, free Groq model
+                model="openai/gpt-oss-20b",  # fast, free Groq model (current as of 2026)
                 messages=st.session_state.messages,
                 temperature=0.5,
             )
